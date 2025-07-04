@@ -45,11 +45,9 @@ const PainelTorneioModel = () => {
 
   const anoDoTorneio = Number(anoInput) || 0;
 
-  const personagensFiltrados = personagens.filter((p) => {
-    if (!p.inicio_em) return true; // aceita nulos
-    const anoInicio = new Date(p.inicio_em).getFullYear();
-    return anoInicio <= anoDoTorneio;
-  });
+  const personagensFiltrados = personagens.filter(
+    (p) => Number(p.inicio_em) <= anoDoTorneio,
+  );
 
   const { data: allTorneios = [], isLoading: isLoadingTorneios } =
     useAllTorneios();
