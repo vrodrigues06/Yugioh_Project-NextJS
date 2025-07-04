@@ -19,14 +19,14 @@ export function filtrarPersonagensPorInicio(
 
   return personagens.filter((personagem) => {
     const geracao = personagem.geracao;
-    const inicioRaw = personagem.inicio_em;
+    const anoInicio = Number(personagem.inicio_em);
+    const estaUsandoUltimoAno = geracao in ultimoAnoPorGeracao;
 
-    // Pega o ano de inicio_em, lidando com string de data ou apenas ano
-    const anoInicio = inicioRaw ? new Date(inicioRaw).getFullYear() : null;
+    const ultimoAno = estaUsandoUltimoAno
+      ? ultimoAnoPorGeracao[geracao]
+      : INICIO_POR_GERACAO[geracao];
 
-    const ultimoAno =
-      ultimoAnoPorGeracao[geracao] ?? INICIO_POR_GERACAO[geracao];
-    const limiteAno = ultimoAno + 1;
+    const limiteAno = estaUsandoUltimoAno ? ultimoAno + 1 : ultimoAno; // não soma nada se veio de INICIO_POR_GERACAO
 
     return anoInicio === null || anoInicio <= limiteAno;
   });
