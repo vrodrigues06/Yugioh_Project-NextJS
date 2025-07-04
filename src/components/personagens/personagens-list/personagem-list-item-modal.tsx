@@ -54,12 +54,10 @@ export function PersonagemListItemModel(personagem: Personagem) {
     const ultimoAno =
       torneios.length > 0
         ? Math.max(...torneios.map((t) => t.ano))
-        : personagem.inicio_em
-        ? Number(personagem.inicio_em)
-        : null;
+        : Number(personagem.inicio_em) - 1;
 
     // Se não for possível determinar o ano, não faz nada
-    if (!ultimoAno || isNaN(ultimoAno)) {
+    if (!ultimoAno) {
       alert("Não foi possível determinar o ano da atualização.");
       setIsAtualizar(!novoEstado);
       return;
@@ -70,7 +68,7 @@ export function PersonagemListItemModel(personagem: Personagem) {
 
     // Verifica se já tem esse ano ou se é igual ao início
     const jaTemAno = personagem.atualizacoes.includes(novoAnoStr);
-    const mesmoDoInicio = novoAnoStr === personagem.inicio_em;
+    const mesmoDoInicio = novoAno === Number(personagem.inicio_em);
     const inicioValido =
       personagem.inicio_em !== null && !isNaN(Number(personagem.inicio_em));
     const novoMaiorQueInicio = inicioValido
