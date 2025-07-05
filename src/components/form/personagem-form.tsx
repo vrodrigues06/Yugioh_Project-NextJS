@@ -12,6 +12,7 @@ import { uploadImagemPerfil } from "@/_lib/apis/personagens-api";
 import Select from "./select";
 import { setAnos } from "@/functions/setAnos";
 import { INICIO_POR_GERACAO } from "@/constants/globals";
+import useAllPersonagens from "@/hooks/personagens/useAllPersonagens";
 
 export default function PersonagemForm({
   geracao,
@@ -24,20 +25,31 @@ export default function PersonagemForm({
     register,
     handleSubmit,
     reset,
+    setError,
     formState: { errors },
   } = useForm<PersonagemFormData>({
     resolver: zodResolver(personagemSchema),
   });
+  const { data: allPersonagens } = useAllPersonagens();
 
   const { isCreating, mutate: createPersonagem } = useCreatePersonagem();
 
   async function onSubmit(data: PersonagemFormData) {
+    if (
+      allPersonagens?.some(
+        (p) => p.nome.toLowerCase() === data.nome.toLowerCase(),
+      )
+    ) {
+      setError("nome", {
+        type: "manual",
+        message: "Já existe um personagem com esse nome.",
+      });
+      return;
+    }
     const imagemFile = data.perfil[0];
 
     const imageUrl = await uploadImagemPerfil(imagemFile, data.nome);
     if (!imageUrl) return;
-
-    console.log(data);
 
     const personagemData = {
       ...data,
