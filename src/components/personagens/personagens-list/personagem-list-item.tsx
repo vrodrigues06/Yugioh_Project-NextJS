@@ -53,7 +53,7 @@ const PersonagensListItem = ({
           isAtualizar
             ? "bg-gradient-to-r from-orange-400 to-orange-300 border-orange-400"
             : "bg-azul-950 border-sky-900"
-        } py-2 pl-2 sm:p-4 shadow-lg rounded-md flex items-center gap-2 xs:gap-4 transition-all group-hover:border-orange-500`}
+        } py-2 pl-2 sm:p-4 shadow-lg rounded-md flex items-center gap-2 xs:gap-4 transition-all group-hover:border-orange-500 relative`}
       >
         <Perfil size="16" personagem={personagem} />
         <div>
@@ -85,6 +85,14 @@ const PersonagensListItem = ({
             handleToggleModal={handleToggleModal}
           />
         )}
+        <span
+          className={`${
+            isAtualizar ? "text-amber-950" : "text-sky-500"
+          } text-[12px] absolute right-2 bottom-1`}
+        >
+          Começo em:{" "}
+          <span className="font-semibold">{personagem.inicio_em}</span>
+        </span>
       </motion.div>
     </Link>
   );
