@@ -82,7 +82,9 @@ const PainelTorneioModel = () => {
       return;
     }
 
-    const precisaAtualizar = personagens.some((p) => p.precisa_atualizar);
+    const precisaAtualizar = personagensFiltrados.some(
+      (p) => p.precisa_atualizar,
+    );
     if (precisaAtualizar) {
       setError("geracao", {
         type: "manual",
@@ -91,7 +93,7 @@ const PainelTorneioModel = () => {
       return;
     }
 
-    const participantesNome = personagens.map((p) => p.nome);
+    const participantesNome = personagensFiltrados.map((p) => p.nome);
 
     if (participantesNome.length < 8) {
       setError("geracao", {

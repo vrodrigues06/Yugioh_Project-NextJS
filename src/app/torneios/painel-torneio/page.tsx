@@ -20,8 +20,6 @@ export default function PaineltorneioPage() {
 
   if (isLoadingTorneios && isLoading) return <Loading />;
 
-  console.log(errors);
-
   return (
     <section className="font-sans py-4 px-4 sm:px-8 md:px-16 mx-auto">
       <h1 className="text-lg sm:text-2xl text-white font-bold mb-1">
