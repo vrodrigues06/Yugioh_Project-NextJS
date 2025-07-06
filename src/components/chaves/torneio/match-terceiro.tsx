@@ -32,6 +32,14 @@ export default function MatchTerceiro({
         numMatches,
       )}`}
     >
+      <div
+        className="absolute left-1/2 -translate-x-1/2 px-4 py-1 rounded-2xl 
+                 bg-white/10 backdrop-blur-md shadow-md border border-white/20 
+                 text-sky-300 text-sm font-semibold"
+        style={{ top: "-42px" }}
+      >
+        Terceiro
+      </div>
       <DuelistItem
         match={match}
         duelista={duelista1}
