@@ -1,11 +1,11 @@
 // components/ui/ConfirmModal.tsx
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment } from "react";
+import React, { Fragment } from "react";
 
 interface ConfirmModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: () => void;
+  onConfirm: (duelAmazing: boolean) => void; // <- recebe como argumento
   title?: string;
   description?: string;
   duelista: string;
@@ -18,6 +18,7 @@ export const ConfirmModal = ({
   title = "Confirmar ação",
   duelista,
 }: ConfirmModalProps) => {
+  const [duelAmazing, setDuelAmazing] = React.useState(false);
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={onClose}>
@@ -58,6 +59,18 @@ export const ConfirmModal = ({
                   </span>
                   como vencedor. Essa ação não poderá ser desfeita.
                 </div>
+                <div className="flex items-center gap-1.5 mt-1.5">
+                  <input
+                    type="checkbox"
+                    name="duelAmazing"
+                    id="duelAmazing"
+                    checked={duelAmazing}
+                    onChange={(e) => setDuelAmazing(e.target.checked)}
+                  />
+                  <label htmlFor="duelAmazing" className="text-green-400">
+                    Duelo incrível?
+                  </label>
+                </div>
 
                 <div className="mt-4 flex justify-end gap-2">
                   <button
@@ -70,7 +83,7 @@ export const ConfirmModal = ({
                   <button
                     type="button"
                     className="px-4 py-1.5 rounded-md text-sm bg-orange-500 hover:bg-orange-600 text-white font-semibold transition"
-                    onClick={onConfirm}
+                    onClick={() => onConfirm(duelAmazing)} // <- passa o valor
                   >
                     Confirmar
                   </button>

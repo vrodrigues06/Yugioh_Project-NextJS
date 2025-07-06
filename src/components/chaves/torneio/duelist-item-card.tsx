@@ -2,7 +2,7 @@ import { Match } from "@/@types";
 import { Colocacao, Personagem, Rivalidades } from "@/@types/personagem";
 import { setEmoji } from "@/functions/setEmoji";
 import React from "react";
-import { GiBurningSkull } from "react-icons/gi";
+import { GiBurningSkull, GiMightyForce } from "react-icons/gi";
 
 import { LuSwords } from "react-icons/lu";
 
@@ -113,6 +113,18 @@ export default function DuelistItemCard({
         `}
         >
           <GiBurningSkull />
+        </span>
+      )}
+      {hasVencedor && match.vencedor === duelista && match.isDueloAmazing && (
+        <span
+          title="Duelo Incrível"
+          className={`animate-pulse
+        absolute z-20 right-8
+        bg-purple-900 rounded-full p-1
+        flex items-center justify-center
+        `}
+        >
+          <GiMightyForce />
         </span>
       )}
       <div

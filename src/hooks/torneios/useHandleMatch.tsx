@@ -32,7 +32,7 @@ export const useHandleMatch = ({
   );
   const { mutate: finalizarTorneio } = useFinalizarTorneio();
 
-  const handleMatch = () => {
+  const handleMatch = (duelAmazing: boolean) => {
     if (torneio.status !== "em_andamento") return;
 
     const oponente = getOponente();
@@ -55,7 +55,7 @@ export const useHandleMatch = ({
         break;
     }
 
-    atualizarStatusPartidas();
+    atualizarStatusPartidas(duelAmazing);
   };
 
   /** === FUNÇÕES AUXILIARES === */
@@ -66,11 +66,12 @@ export const useHandleMatch = ({
   const isEliminado = (nome: string | null) =>
     torneio.classificacao.some((item) => item.nome === nome);
 
-  const atualizarStatusPartidas = () => {
+  const atualizarStatusPartidas = (duelAmazing: boolean) => {
     const partidaConcluida: Match = {
       ...match,
       status: "concluida",
       vencedor: duelista,
+      isDueloAmazing: duelAmazing,
     };
 
     let matchesAtualizadas = torneio.matches.map((m) =>

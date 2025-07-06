@@ -83,4 +83,5 @@ export interface Match {
   proxima_partida_id: number | null;
   origemDuelista1?: string | null;
   origemDuelista2?: string | null;
+  isDueloAmazing?: boolean;
 }
