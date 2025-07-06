@@ -17,6 +17,10 @@ const RankingAnual = ({ ano, geracao }: IRankingAnual) => {
 
   if (!ranking) return;
 
+  const rankingOrdenado = [...ranking.ranking].sort(
+    (a, b) => b.pontos - a.pontos,
+  );
+
   return (
     <motion.div
       initial={{ x: 50, opacity: 0 }}
@@ -26,7 +30,7 @@ const RankingAnual = ({ ano, geracao }: IRankingAnual) => {
     >
       <h3 className="font-bold mb-4">Ranking {ano}</h3>
       <ul className="rounded-md divide-y divide-sky-800/50 grid gap-1.5">
-        {ranking.ranking.map((rankItem, index) => {
+        {rankingOrdenado.map((rankItem, index) => {
           let emoji: ReactNode = <span></span>;
 
           if (index === 0) emoji = <FaCrown className="text-yellow-400" />;

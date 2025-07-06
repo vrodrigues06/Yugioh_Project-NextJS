@@ -118,10 +118,12 @@ export const useHandleMatch = ({
     const rankingAtual: Ranking = {
       ano: torneio.ano,
       geracao: torneio.geracao,
-      ranking: torneio.classificacao.map(({ nome, pontos }) => ({
-        nome,
-        pontos,
-      })),
+      ranking: torneio.classificacao
+        .map(({ nome, pontos }) => ({
+          nome,
+          pontos,
+        }))
+        .sort((a, b) => b.pontos - a.pontos), // ordena do maior para o menor
     };
 
     updateRankingGlobal(torneio.geracao, torneio.classificacao);

@@ -18,23 +18,34 @@ const TorneioCardPodium = ({ randomTorneio }: ITorneioCardPodium) => {
         <span className="font-semibold mb-2 border-b border-sky-800/50 pb-1">
           {" "}
           <FaTrophy className="text-yellow-300" />
-          Campeão: {randomTorneio.podium[0].nome}
+          Campeão:{" "}
+          {
+            randomTorneio.podium.find((p) => p.classificacao === "Campeao")
+              ?.nome
+          }
         </span>
         <span className="font-semibold">
           {" "}
           <FaMedal className="text-stone-400" />
-          Vice: {randomTorneio.podium[1]?.nome}
+          Vice:{" "}
+          {
+            randomTorneio.podium.find((p) => p.classificacao === "Segundo")
+              ?.nome
+          }
         </span>
         <span>
           {" "}
           <FaMedal className="text-amber-700" /> Terceiro:{" "}
-          {randomTorneio.podium[2]?.nome}
+          {
+            randomTorneio.podium.find((p) => p.classificacao === "Terceiro")
+              ?.nome
+          }
         </span>
 
         <span>
           {" "}
           <FaMedal className="text-sky-800" /> Quarto:{" "}
-          {randomTorneio.podium[3]?.nome}
+          {randomTorneio.podium.find((p) => p.classificacao === "Quarto")?.nome}
         </span>
       </div>
     </div>
