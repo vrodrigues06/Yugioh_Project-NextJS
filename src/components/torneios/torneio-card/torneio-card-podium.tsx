@@ -6,6 +6,8 @@ interface ITorneioCardPodium {
 }
 
 const TorneioCardPodium = ({ randomTorneio }: ITorneioCardPodium) => {
+  if (!randomTorneio) return;
+
   return (
     <div>
       <p className="text-xs sm:text-sm text-slate-400  mb-2 md:mb-3 relative">

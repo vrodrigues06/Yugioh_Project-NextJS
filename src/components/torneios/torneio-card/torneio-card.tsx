@@ -17,6 +17,7 @@ export default async function TorneioCard() {
   if (error) return <Error message={error} />;
 
   if (!randomTorneio || !torneios) return null;
+  if (randomTorneio.status !== "finalizado") return null;
 
   // const randomTorneio = torneios.find((t) => t.nome === "GX 2023");
   const torneiosAnteriores = torneios?.filter((torneio) => {
