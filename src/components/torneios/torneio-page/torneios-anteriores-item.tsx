@@ -9,15 +9,20 @@ const TorneiosAnterioresItem = ({ torneio }: { torneio: Torneio }) => {
       <h3 className="text-orange-500 mb-2">{torneio.nome}</h3>
       <p className="flex gap-1 items-center">
         <FaCrown className="text-yellow-500" /> Campeão:{" "}
-        {torneio.podium[0].nome}
+        {torneio.podium.find((p) => p.classificacao === "Campeao")?.nome ||
+          "Não definido"}
       </p>
       <span className="block text-slate-400 mb-3">{duelistas} Duelistas</span>
       <ul>
-        {torneio.podium.map((d, index) => {
-          if (index === 0) return;
+        {["Segundo", "Terceiro", "Quarto"].map((posicao, index) => {
+          const participante = torneio.podium.find(
+            (p) => p.classificacao === posicao,
+          );
+          if (!participante) return null;
           return (
-            <li className="text-slate-400" key={d.nome}>
-              <span className="font-bold">{index + 1}°</span> {d.nome}
+            <li className="text-slate-400" key={participante.nome}>
+              <span className="font-bold">{index + 2}°</span>{" "}
+              {participante.nome}
             </li>
           );
         })}

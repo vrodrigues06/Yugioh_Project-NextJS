@@ -5,7 +5,7 @@ export const INICIO_POR_GERACAO: Record<string, number> = {
   // "5ds": 2009,
 };
 
-export const MIN_CONFRONTOS_DESTAQUE = 1;
+export const MIN_CONFRONTOS_DESTAQUE = 2;
 export const VITORIAS_MUTUAS = false; // se ambos precisam ter ao menos 1 vitória
 
 export const SISTEMAS_PONTUACAO: Record<string, Record<string, number>> = {
