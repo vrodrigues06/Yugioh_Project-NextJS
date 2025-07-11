@@ -164,7 +164,12 @@ export function organizarParticipantesTorneio(
   const jogadoresPreliminares = partidasPreliminares * 2;
 
   // 🎯 Pega o último torneio realizado para buscar o pódio
-  const ultimoTorneio = torneiosGeracao[torneiosGeracao.length - 1];
+  const ultimoTorneio = torneiosGeracao.length
+    ? torneiosGeracao.reduce((maisRecente, atual) =>
+        atual.ano > maisRecente.ano ? atual : maisRecente,
+      )
+    : null;
+
   const podiumAnterior = ultimoTorneio?.podium.map((item) => item.nome) || [];
 
   // 🔥 Determina quantas vagas existem na fase principal (quem não joga preliminar)
