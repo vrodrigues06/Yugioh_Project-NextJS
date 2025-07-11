@@ -278,9 +278,12 @@ export async function addRankingMundial(
 }
 
 export async function uploadImagemPerfil(file: File, nomePersonagem: string) {
-  const fileName = `${formatDate()}-${nomePersonagem}`;
+  const fileName = `${formatDate()}-${nomePersonagem
+    .trim()
+    .replace(/\s+/g, "")}`;
+
   const { data, error } = await supabase.storage
-    .from("perfis") // Substitua pelo nome correto do seu bucket no Supabase
+    .from("perfis")
     .upload(`/${fileName}`, file);
 
   if (error) {
@@ -293,4 +296,95 @@ export async function uploadImagemPerfil(file: File, nomePersonagem: string) {
   return `${
     supabase.storage.from("perfis").getPublicUrl(`/${fileName}`).data.publicUrl
   }`;
+}
+
+// export async function editImagemPerfil(file: File, personagem: Personagem) {
+//   const fileName = `${formatDate()}-${personagem.nome
+//     .trim()
+//     .replace(/\s+/g, "")}`;
+
+//   if (personagem.perfil) {
+//     try {
+//       // A URL pública deve conter o caminho relativo do arquivo dentro do bucket "perfis"
+//       // Supondo que a URL seja algo como "https://.../perfis/arquivo.jpg"
+//       // Precisamos extrair a parte "arquivo.jpg" para passar para o delete()
+//       const url = new URL(personagem.perfil);
+//       const path = url.pathname.split("/perfis/")[1].replace("/", ""); // obtém o caminho relativo
+
+//       if (path) {
+//         const { error: deleteError } = await supabase.storage
+//           .from("perfis")
+//           .remove([path]);
+
+//         if (deleteError) {
+//           console.warn("Erro ao deletar imagem antiga:", deleteError.message);
+//           // Aqui você pode decidir se quer continuar ou abortar o upload
+//         }
+//       }
+//     } catch (e) {
+//       console.warn("Erro ao processar link da imagem antiga:", e);
+//     }
+//   }
+
+//   // Agora faz o upload da nova imagem
+//   const { data, error } = await supabase.storage
+//     .from("perfis")
+//     .upload(`/${fileName}`, file);
+
+//   if (error) {
+//     console.error("Erro ao enviar imagem:", error.message);
+//     toast.error("Erro ao enviar imagem. Tente novamente.");
+//     return null;
+//   }
+
+//   // Retorna a URL pública da imagem nova
+//   return supabase.storage.from("perfis").getPublicUrl(`/${fileName}`).data
+//     .publicUrl;
+// }
+
+export async function editImagemPerfil(file: File, personagem: Personagem) {
+  const fileName = `${formatDate()}-${personagem.nome
+    .trim()
+    .replace(/\s+/g, "")}`;
+
+  // Deleta imagem antiga se existir
+  if (personagem.perfil) {
+    try {
+      const url = new URL(personagem.perfil);
+      let path = url.pathname.split("/perfis/")[1];
+
+      // Remove barras iniciais, se houver
+      if (path?.startsWith("/")) {
+        path = path.slice(1);
+      }
+
+      if (path) {
+        const { error: deleteError } = await supabase.storage
+          .from("perfis")
+
+          .remove([path]);
+
+        if (deleteError) {
+          console.warn("Erro ao deletar imagem antiga:", deleteError.message);
+        }
+      }
+    } catch (e) {
+      console.warn("Erro ao processar link da imagem antiga:", e);
+    }
+  }
+
+  // Upload da nova imagem — SEM BARRA INICIAL
+  const { data, error } = await supabase.storage
+    .from("perfis")
+    .upload(`${fileName}`, file); // 👈 sem barra inicial
+
+  if (error) {
+    console.error("Erro ao enviar imagem:", error.message);
+    toast.error("Erro ao enviar imagem. Tente novamente.");
+    return null;
+  }
+
+  // Retorna a nova URL pública
+  return supabase.storage.from("perfis").getPublicUrl(`${fileName}`).data
+    .publicUrl;
 }

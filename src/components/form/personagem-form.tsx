@@ -47,8 +47,9 @@ export default function PersonagemForm({
       return;
     }
     const imagemFile = data.perfil[0];
+    const cleanNome = data.nome.trim().replace(/\s+/g, "");
 
-    const imageUrl = await uploadImagemPerfil(imagemFile, data.nome);
+    const imageUrl = await uploadImagemPerfil(imagemFile, cleanNome);
     if (!imageUrl) return;
 
     const personagemData = {

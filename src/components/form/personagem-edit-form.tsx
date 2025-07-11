@@ -2,7 +2,10 @@ import React from "react";
 import { Personagem, PersonagemProps } from "../../@types/personagem";
 import useEditPersonagem from "@/hooks/personagens/useEditPersonagens";
 import { useForm } from "react-hook-form";
-import { uploadImagemPerfil } from "@/_lib/apis/personagens-api";
+import {
+  editImagemPerfil,
+  uploadImagemPerfil,
+} from "@/_lib/apis/personagens-api";
 import Perfil from "../personagens/personagem/perfil";
 import FileInput from "./file-input";
 import { PersonagemFormData } from "@/schemas/personagem-schema";
@@ -39,7 +42,7 @@ const PersonagemEditForm = ({ personagem }: PersonagemEditFormProps) => {
       const imagemFile = data.perfil?.[0];
 
       if (imagemFile instanceof File) {
-        const uploadedUrl = await uploadImagemPerfil(imagemFile, data.nome);
+        const uploadedUrl = await editImagemPerfil(imagemFile, personagem);
 
         if (!uploadedUrl) {
           throw new Error("Erro ao fazer upload da imagem.");
