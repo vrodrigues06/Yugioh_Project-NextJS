@@ -8,7 +8,7 @@ type PersonagemTooltipProps = {
   melhoresColocacoes: Colocacao[];
   colocacoesAnteriores: Colocacao[];
   rivalidades: Rivalidades[];
-  eliminadoresAnteriores: string[];
+  eliminadoresAnteriores: { eliminadoPor: string; ano: number }[];
 };
 
 export default function DuelistToolTip({
@@ -67,24 +67,32 @@ export default function DuelistToolTip({
       <div>
         <p className="mb-1">Histórico Recente:</p>
         <ul className="grid gap-1">
-          {colocacoesAnteriores.map((c, i) => (
-            <li key={c.ano} className="flex flex-col text-white leading-tight ">
-              <span className="flex items-center gap-1">
-                <span className="text-sky-400 font-semibold">{c.ano}:</span>
-                {setEmoji(c.classificacao)} {c.classificacao}
-              </span>
+          {colocacoesAnteriores.map((c) => {
+            const eliminador = eliminadoresAnteriores.find(
+              (e) => e.ano === Number(c.ano),
+            );
 
-              {eliminadoresAnteriores?.length > i &&
-                eliminadoresAnteriores[i] && (
+            return (
+              <li
+                key={c.ano}
+                className="flex flex-col text-white leading-tight"
+              >
+                <span className="flex items-center gap-1">
+                  <span className="text-sky-400 font-semibold">{c.ano}:</span>
+                  {setEmoji(c.classificacao)} {c.classificacao}
+                </span>
+
+                {eliminador && (
                   <span className="text-slate-500 text-xs italic">
                     eliminado por{" "}
-                    <span className="text-rose-400 ">
-                      {eliminadoresAnteriores[i]}
+                    <span className="text-rose-400">
+                      {eliminador.eliminadoPor}
                     </span>
                   </span>
                 )}
-            </li>
-          ))}
+              </li>
+            );
+          })}
         </ul>
       </div>
     </div>

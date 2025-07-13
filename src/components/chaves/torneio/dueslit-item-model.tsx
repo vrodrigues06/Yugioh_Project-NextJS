@@ -89,21 +89,41 @@ export const DuelistItemModel = ({
     rivalidades = filtrarRivalidadesEmDestaque(rivalidadesSemFiltro);
   }
 
-  const eliminadoresAnteriores: string[] = useMemo(() => {
-    if (!duelista || !torneios) return [];
+  // const eliminadoresAnteriores: string[] = useMemo(() => {
+  //   if (!duelista || !torneios) return [];
 
-    const anosValidos = [1, 2, 3].map((i) => torneio.ano - i);
+  //   const anosValidos = [1, 2, 3].map((i) => torneio.ano - i);
 
-    return anosValidos
-      .map((ano) => {
-        const t = torneios.find((t) => t.ano === ano && t.classificacao);
-        return (
-          t?.classificacao.find((c) => c.nome === duelista)?.eliminadoPor ||
-          null
+  //   return anosValidos
+  //     .map((ano) => {
+  //       const t = torneios.find((t) => t.ano === ano && t.classificacao);
+  //       return (
+  //         t?.classificacao.find((c) => c.nome === duelista)?.eliminadoPor ||
+  //         null
+  //       );
+  //     })
+  //     .filter((nome): nome is string => !!nome);
+  // }, [torneios, duelista, torneio.ano]);
+
+  const eliminadoresAnteriores: { eliminadoPor: string; ano: number }[] =
+    useMemo(() => {
+      if (!duelista || !torneios) return [];
+
+      const anosValidos = [1, 2, 3].map((i) => torneio.ano - i);
+
+      return anosValidos
+        .map((ano) => {
+          const t = torneios.find((t) => t.ano === ano && t.classificacao);
+          const eliminadoPor = t?.classificacao.find(
+            (c) => c.nome === duelista,
+          )?.eliminadoPor;
+
+          return eliminadoPor ? { eliminadoPor, ano } : null;
+        })
+        .filter(
+          (entry): entry is { eliminadoPor: string; ano: number } => !!entry,
         );
-      })
-      .filter((nome): nome is string => !!nome);
-  }, [torneios, duelista, torneio.ano]);
+    }, [torneios, duelista, torneio.ano]);
 
   return {
     personagem,
