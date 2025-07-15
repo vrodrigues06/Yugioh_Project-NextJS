@@ -45,7 +45,21 @@ export const DuelistItemModel = ({
       (c) => c.nome === duelista,
     );
 
+    if (!registroAnterior?.eliminadoPor) return false;
+
     return registroAnterior?.eliminadoPor === oponenteAtual;
+  })();
+
+  const isLastChampion = (() => {
+    if (!torneioAnterior || !torneioAnterior.podium) return false;
+
+    const registroAnterior = torneioAnterior.podium.find(
+      (p) => p.nome === duelista,
+    );
+
+    if (!registroAnterior) return false;
+
+    return registroAnterior.classificacao === "Campeao";
   })();
 
   const torneiosFilted = torneios.filter((t) => t.ano < torneio.ano);
@@ -143,5 +157,6 @@ export const DuelistItemModel = ({
     rivalidades,
     isAvengedDuel,
     eliminadoresAnteriores,
+    isLastChampion,
   };
 };

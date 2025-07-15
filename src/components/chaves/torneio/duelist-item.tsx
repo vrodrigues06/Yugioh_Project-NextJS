@@ -35,6 +35,7 @@ const DuelistItem = ({
     hasTitulo,
     rivalidades,
     isAvengedDuel,
+    isLastChampion,
     eliminadoresAnteriores,
   } = DuelistItemModel({ duelista, match, torneio });
   const { isModalOpen, openModal, closeModal, confirmAction } =
@@ -62,6 +63,7 @@ const DuelistItem = ({
           rivalidades={rivalidades}
           match={match}
           isAvengedDuel={isAvengedDuel}
+          isLastChampion={isLastChampion}
         />
         <DuelistToolTip
           melhoresColocacoes={melhoresColocacoes}

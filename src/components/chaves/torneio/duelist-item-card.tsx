@@ -2,7 +2,7 @@ import { Match } from "@/@types";
 import { Colocacao, Personagem, Rivalidades } from "@/@types/personagem";
 import { setEmoji } from "@/functions/setEmoji";
 import React from "react";
-import { GiBurningSkull, GiMightyForce } from "react-icons/gi";
+import { GiBurningSkull, GiMightyForce, GiLaurelCrown } from "react-icons/gi";
 
 import { LuSwords } from "react-icons/lu";
 
@@ -20,6 +20,7 @@ type DuelistaCardProps = {
   rivalidades: Rivalidades[];
   match: Match;
   isAvengedDuel: boolean;
+  isLastChampion: boolean;
 };
 
 export default function DuelistItemCard({
@@ -36,6 +37,7 @@ export default function DuelistItemCard({
   rivalidades,
   match,
   isAvengedDuel,
+  isLastChampion,
 }: DuelistaCardProps) {
   const handleClick = () => {
     if (!hasVencedor && isMatchReady) {
@@ -113,6 +115,18 @@ export default function DuelistItemCard({
         `}
         >
           <GiBurningSkull />
+        </span>
+      )}
+      {isLastChampion && (
+        <span
+          title="Último Campeão"
+          className={`animate-pulse
+        absolute z-20 right-2
+        bg-laranja-500 rounded-full p-1
+        flex items-center justify-center
+        `}
+        >
+          <GiLaurelCrown />
         </span>
       )}
       {hasVencedor && match.vencedor === duelista && match.isDueloAmazing && (
