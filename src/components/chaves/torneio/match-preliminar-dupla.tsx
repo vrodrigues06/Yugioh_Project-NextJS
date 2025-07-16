@@ -41,7 +41,7 @@ export default function MatchPreliminarDupla({
 
   return (
     <>
-      <div className="flex flex-col justify-center gap-0.5 absolute select-none right-130 -top-[60px]">
+      <div className="flex flex-col justify-center gap-0.5 absolute select-none right-195 -top-[60px]">
         <DuelistItem
           match={match1}
           duelista={duelista1}

@@ -29,7 +29,7 @@ export const SISTEMAS_PONTUACAO: Record<string, Record<string, number>> = {
     quarto: 8,
     terceiro: 11,
     segundo: 14,
-    campeao: 25,
+    campeao: 35,
   },
   "16-31": {
     "primeira fase": 0,
@@ -50,7 +50,7 @@ export const SISTEMAS_PONTUACAO: Record<string, Record<string, number>> = {
     quartas: 10,
     quarto: 13,
     terceiro: 18,
-    segundo: 27,
+    segundo: 25,
     campeao: 50,
   },
   "64+": {
