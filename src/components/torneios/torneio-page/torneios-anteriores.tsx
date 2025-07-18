@@ -13,16 +13,14 @@ const TorneiosAnteriores = ({ ano, geracao }: ITorneiosAnteriores) => {
 
   const torneiosAnteriores = torneios
     .filter((torneio) => {
-      if (torneio.geracao === geracao) {
-        if (
-          torneio.ano === ano - 3 ||
+      return (
+        torneio.geracao === geracao &&
+        (torneio.ano === ano - 1 ||
           torneio.ano === ano - 2 ||
-          torneio.ano === ano - 1
-        )
-          return true;
-      }
+          torneio.ano === ano - 3)
+      );
     })
-    .reverse();
+    .sort((a, b) => b.ano - a.ano); // Ordena do mais recente para o mais antigo
 
   if (error) return <Error message={error} />;
 

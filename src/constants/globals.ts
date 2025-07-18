@@ -1,7 +1,7 @@
-export const GERACOES = ["dm"];
+export const GERACOES = ["dm", "gx"];
 export const INICIO_POR_GERACAO: Record<string, number> = {
   dm: 2000,
-  // gx: 2005,
+  gx: 2005,
   // "5ds": 2009,
 };
 

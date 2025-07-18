@@ -22,6 +22,7 @@ export default async function TorneiosPage() {
   if (error) return <Error message={error} />;
 
   if (!torneios) return;
+  const torneiosFilted = torneios?.filter((t) => t.status === "finalizado");
 
   return (
     <section className="container font-sans  py-4 px-4 sm:px-8 md:px-16 mx-auto">
@@ -47,7 +48,7 @@ export default async function TorneiosPage() {
       </SectionHeader>
 
       <CardGridByGeracao
-        data={torneios}
+        data={torneiosFilted}
         linkPrefix="torneios"
         icon={<FaTrophy className="text-orange-500" />}
         label="Torneio"
