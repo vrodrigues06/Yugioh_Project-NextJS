@@ -31,7 +31,11 @@ export default function DuelistToolTip({
           </span>
         </h2>
         <span>
-          Ranking <span className="text-white">#{rankingNacional}</span>
+          {rankingNacional && rankingNacional > 0 ? (
+            <>
+              Ranking <span className="text-white">#{rankingNacional}</span>
+            </>
+          ) : null}
         </span>
       </div>
 
@@ -65,7 +69,9 @@ export default function DuelistToolTip({
       )}
 
       <div>
-        <p className="mb-1">Histórico Recente:</p>
+        {colocacoesAnteriores.length > 0 && (
+          <p className="mb-1">Histórico Recente:</p>
+        )}
         <ul className="grid gap-1">
           {colocacoesAnteriores.map((c) => {
             const eliminador = eliminadoresAnteriores.find(

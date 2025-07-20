@@ -37,7 +37,7 @@ export function getResumoPersonagem(
   const colocacoesAnteriores = [...personagem.colocacoes]
     .filter((c) => c.ano < torneioAno)
     .sort((a, b) => b.ano - a.ano)
-    .slice(0, 3);
+    .slice(0, 5);
 
   const titulos = personagem.colocacoes.filter(
     (c) => c.classificacao === "Campeao" && c.ano < torneioAno,

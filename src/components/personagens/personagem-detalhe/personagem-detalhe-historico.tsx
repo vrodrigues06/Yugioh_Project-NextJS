@@ -1,9 +1,13 @@
 import { Colocacao, Personagem } from "@/@types/personagem";
 import { setEmoji } from "@/functions/setEmoji";
 
+interface ColocacaoComEliminador extends Colocacao {
+  eliminadoPor?: string;
+}
+
 interface IPersonagenCardHistorico {
   personagem: Personagem;
-  colocacoesAnteriores: Colocacao[];
+  colocacoesAnteriores: ColocacaoComEliminador[];
 }
 
 const PersonagemDetalheHistorico = ({
@@ -13,7 +17,7 @@ const PersonagemDetalheHistorico = ({
   return (
     <div className="order-10 xs:order-0 row-span-2">
       <div className="mb-4">
-        <p className="text-xs sm:text-sm text-slate-400  mb-2 md:mb-3 relative">
+        <p className="text-xs sm:text-sm text-slate-400 mb-2 md:mb-3 relative">
           <span className="w-6 h-px -top-0.5 absolute bg-gradient-to-t from-azul-800 to-azul-300 rounded-md"></span>
           Histórico Anterior
         </p>
@@ -29,6 +33,7 @@ const PersonagemDetalheHistorico = ({
                   <span className="text-orange-500 block mb-0.5">
                     ({colocacao.ano})
                   </span>
+
                   {mundial && (
                     <span className="flex gap-0.5 xs:gap-1 items-center">
                       {setEmoji(mundial.classificacao)} Mundial:{" "}
@@ -42,6 +47,15 @@ const PersonagemDetalheHistorico = ({
                       personagem.geracao.slice(1)}
                     : {colocacao.classificacao}
                   </span>
+
+                  {colocacao.eliminadoPor && (
+                    <span className="text-slate-500 italic text-[0.7rem] mt-0.5 block">
+                      Eliminado por{" "}
+                      <span className="text-rose-400">
+                        {colocacao.eliminadoPor}
+                      </span>
+                    </span>
+                  )}
                 </div>
               );
             })}

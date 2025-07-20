@@ -1,5 +1,7 @@
 import { personagemGet } from "@/_lib/actions/personagem-get";
 import { rankingGlobalGet } from "@/_lib/actions/ranking-global-get";
+import { torneiosByGenGet } from "@/_lib/actions/torneios-by-gen-get";
+import { torneiosGet } from "@/_lib/actions/torneios-get";
 import Error from "@/components/error";
 import MiniLoading from "@/components/mini-loading";
 import PersonagemDetalheHeader from "@/components/personagens/personagem-detalhe/personagem-detalhe-hearder";
@@ -27,17 +29,35 @@ export default async function PersonagemPage({
     Number(id),
   );
   const { data: rankings, error: errorRankings } = await rankingGlobalGet();
-
   const error = errorPersonagem || errorRankings;
-
   if (!personagem || !rankings) return <Error message={error} />;
+  const { data: torneiosGen, error: errorTorneios } = await torneiosByGenGet(
+    personagem?.geracao,
+  );
 
   const melhoresColocacoes = setMelhoresColocacoes(personagem);
   const melhoresColocacoesMundial = setMelhoresColocacoes(personagem, true);
 
-  const colocacoesAnteriores = personagem.colocacoes.sort((a, b) => {
-    return b.ano - a.ano;
-  });
+  const colocacoesAnterioresComEliminador =
+    torneiosGen
+      ?.flatMap((torneio) => {
+        const entrada = torneio.classificacao.find(
+          (p) => p.nome === personagem.nome,
+        );
+
+        if (!entrada) return [];
+
+        return [
+          {
+            ano: torneio.ano,
+            eliminadoPor: entrada.eliminadoPor || "",
+            classificacao: entrada.classificacao || "",
+          },
+        ];
+      })
+      .sort((a, b) => b.ano - a.ano) || [];
+
+  // {ano: "2000", eliminadoPor: "", classificação: "" }
 
   if (Object.keys(rankings).length === 0) return;
 
@@ -84,7 +104,7 @@ export default async function PersonagemPage({
           </div>
           <PersonagemDetalheHistorico
             personagem={personagem}
-            colocacoesAnteriores={colocacoesAnteriores}
+            colocacoesAnteriores={colocacoesAnterioresComEliminador}
           />
         </div>
       </div>
