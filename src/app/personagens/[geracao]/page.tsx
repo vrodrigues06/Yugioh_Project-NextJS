@@ -7,7 +7,6 @@ import Modal from "@/components/modal";
 import PersonagensListByGen from "@/components/personagens/personagens-list/personagens-list-by-gen";
 import PersonagensListSkeleton from "./loading";
 import PersonagemForm from "@/components/form/personagem-form";
-import useAllPersonagens from "@/hooks/personagens/useAllPersonagens";
 
 const PersonagensByGenPage = () => {
   const { geracao } = useParams();
@@ -19,6 +18,12 @@ const PersonagensByGenPage = () => {
       .then((res) => res.json())
       .then((data) => setRole(data.role));
   }, []);
+
+  React.useEffect(() => {
+    if (geracao && typeof geracao === "string") {
+      document.title = `${geracao.toUpperCase()} | Personagens`;
+    }
+  }, [geracao]);
 
   if (!geracao || typeof geracao !== "string") return;
 

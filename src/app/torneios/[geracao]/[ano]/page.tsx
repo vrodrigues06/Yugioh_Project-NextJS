@@ -26,6 +26,12 @@ export default function TorneioPage({
       .then((data) => setRole(data.role));
   }, []);
 
+  React.useEffect(() => {
+    if (geracao && typeof geracao === "string") {
+      document.title = `${geracao.toUpperCase()} ${ano.toUpperCase()}  | Torneios`;
+    }
+  }, [geracao, ano]);
+
   const {
     torneioSelected,
     edicaoNumber,
@@ -43,7 +49,7 @@ export default function TorneioPage({
   }, [torneioSelected, error]);
 
   if (!isReady) return <Loading />;
-  if (!torneioSelected || !ano) return <NenhumTorneio role={role} />;
+  if (!torneioSelected || !ano) return;
   if (error && typeof error !== "boolean") return <Error message={error} />;
   return (
     <section className="container font-sans py-4 px-4 sm:px-8 md:px-16 mx-auto">

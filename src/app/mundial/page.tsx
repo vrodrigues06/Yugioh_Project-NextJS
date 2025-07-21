@@ -1,8 +1,11 @@
 import { mundiaisGet } from "@/_lib/actions/mundiais-get";
-import Loading from "@/components/loading";
-import Link from "next/link";
+import { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
-import { MdDashboardCustomize } from "react-icons/md";
+
+export const metadata: Metadata = {
+  title: "Yugioh | Mundial",
+  description: "Página do Mundial de Personagens",
+};
 
 export default async function MundialRedirectPage() {
   const { data: mundiais, error } = await mundiaisGet();

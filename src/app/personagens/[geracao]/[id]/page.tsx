@@ -1,7 +1,6 @@
 import { personagemGet } from "@/_lib/actions/personagem-get";
 import { rankingGlobalGet } from "@/_lib/actions/ranking-global-get";
 import { torneiosByGenGet } from "@/_lib/actions/torneios-by-gen-get";
-import { torneiosGet } from "@/_lib/actions/torneios-get";
 import Error from "@/components/error";
 import MiniLoading from "@/components/mini-loading";
 import PersonagemDetalheHeader from "@/components/personagens/personagem-detalhe/personagem-detalhe-hearder";
@@ -11,6 +10,7 @@ import PersonagemDetalheTitulos from "@/components/personagens/personagem-detalh
 import PersonagemRivalidade from "@/components/personagens/personagem-detalhe/personagem-rivalidade";
 import { findRankingIndex } from "@/functions/findRankingIndex";
 import { setMelhoresColocacoes } from "@/functions/setMelhoresColocacoes";
+import { Metadata } from "next";
 import Link from "next/link";
 import React, { Suspense } from "react";
 
@@ -18,6 +18,21 @@ interface IPersonagemDetalheCard {
   params: Promise<{
     id: string;
   }>;
+}
+export async function generateMetadata({
+  params,
+}: IPersonagemDetalheCard): Promise<Metadata> {
+  const { id } = await params;
+  const { data: personagem } = await personagemGet(Number(id));
+
+  return {
+    title: personagem
+      ? `${personagem.nome} | ${personagem.geracao.toUpperCase()}`
+      : "Yugioh | Project",
+    description: personagem
+      ? `Detalhes do personagem ${personagem.nome}`
+      : "Página do Mundial",
+  };
 }
 
 export default async function PersonagemPage({
@@ -73,41 +88,43 @@ export default async function PersonagemPage({
     rankings,
   );
   return (
-    <div className="bg-azul-950 p-2 rounded col-span-2">
-      <Link
-        href={`/personagens/${personagem.geracao}`}
-        className="hover:underline text-slate-400 text-xs block p-2"
-      >
-        {" "}
-        🠔 Voltar para personagens{" "}
-      </Link>
-      <div className="bg-azul-950 shadow-xl rounded-md mb-10 overflow-hidden transition-all hover:ring-1 hover:ring-white duration-100">
-        <PersonagemDetalheHeader personagem={personagem} />
-        <div className="p-4 ">
-          <div className="grid xs:grid-cols-2 gap-y-6 mb-8">
-            <div>
-              <PersonagemDetalheTitulos
-                melhoresColocacoes={melhoresColocacoes}
-                melhoresColocacoesMundial={melhoresColocacoesMundial}
-                geracao={personagem.geracao}
-                atualizacoes={personagem.atualizacoes}
+    <>
+      <div className="bg-azul-950 p-2 rounded col-span-2">
+        <Link
+          href={`/personagens/${personagem.geracao}`}
+          className="hover:underline text-slate-400 text-xs block p-2"
+        >
+          {" "}
+          🠔 Voltar para personagens{" "}
+        </Link>
+        <div className="bg-azul-950 shadow-xl rounded-md mb-10 overflow-hidden transition-all hover:ring-1 hover:ring-white duration-100">
+          <PersonagemDetalheHeader personagem={personagem} />
+          <div className="p-4 ">
+            <div className="grid xs:grid-cols-2 gap-y-6 mb-8">
+              <div>
+                <PersonagemDetalheTitulos
+                  melhoresColocacoes={melhoresColocacoes}
+                  melhoresColocacoesMundial={melhoresColocacoesMundial}
+                  geracao={personagem.geracao}
+                  atualizacoes={personagem.atualizacoes}
+                />
+                <Suspense fallback={<MiniLoading />}>
+                  <PersonagemRivalidade personagem={personagem} />
+                </Suspense>
+              </div>
+              <PersonagemDetalheRankings
+                rankingMundial={rankingMundial}
+                rankingNacional={rankingNacional}
+                personagem={personagem}
               />
-              <Suspense fallback={<MiniLoading />}>
-                <PersonagemRivalidade personagem={personagem} />
-              </Suspense>
             </div>
-            <PersonagemDetalheRankings
-              rankingMundial={rankingMundial}
-              rankingNacional={rankingNacional}
+            <PersonagemDetalheHistorico
               personagem={personagem}
+              colocacoesAnteriores={colocacoesAnterioresComEliminador}
             />
           </div>
-          <PersonagemDetalheHistorico
-            personagem={personagem}
-            colocacoesAnteriores={colocacoesAnterioresComEliminador}
-          />
         </div>
       </div>
-    </div>
+    </>
   );
 }

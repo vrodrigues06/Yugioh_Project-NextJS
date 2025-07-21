@@ -1,10 +1,16 @@
 import { regrasGet } from "@/_lib/actions/regras-get";
 import Error from "@/components/error";
 import RegrasLista from "@/components/regras/regras-lista";
+import { Metadata } from "next";
 import Link from "next/link";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 
 type CategoriaChave = "decks" | "torneio" | "mundial";
+
+export const metadata: Metadata = {
+  title: "Yugioh | Regras",
+  description: "Página de regras do jogo Yugioh",
+};
 
 export default async function RegrasPage() {
   const { data: regras, error } = await regrasGet();

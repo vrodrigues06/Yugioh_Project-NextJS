@@ -181,21 +181,9 @@ export const useHandleMatch = ({
     }
 
     // Quem venceu as semifinais foi quem eliminou quem está no 3º lugar
-    const eliminadorDuelista =
-      partidaOrigem1 &&
-      (partidaTerceiro.origemDuelista1?.includes(
-        partidaOrigem1.numero_partida.toString(),
-      )
-        ? partidaOrigem1.vencedor
-        : null);
+    const eliminadorDuelista = partidaOrigem1 && partidaOrigem1.vencedor;
 
-    const eliminadorOponente =
-      partidaOrigem2 &&
-      (partidaTerceiro.origemDuelista2?.includes(
-        partidaOrigem2.numero_partida.toString(),
-      )
-        ? partidaOrigem2.vencedor
-        : null);
+    const eliminadorOponente = partidaOrigem2 && partidaOrigem2.vencedor;
 
     torneio.classificacao.push(
       {
