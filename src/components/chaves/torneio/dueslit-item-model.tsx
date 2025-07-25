@@ -123,7 +123,11 @@ export const DuelistItemModel = ({
     useMemo(() => {
       if (!duelista || !torneios) return [];
 
-      const anosValidos = [1, 2, 3].map((i) => torneio.ano - i);
+      const anosValidos = torneios.map((t) => {
+        if (t.ano >= Number(personagem?.inicio_em)) {
+          return t.ano;
+        }
+      });
 
       return anosValidos
         .map((ano) => {

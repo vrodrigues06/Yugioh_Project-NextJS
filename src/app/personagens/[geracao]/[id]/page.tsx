@@ -19,20 +19,68 @@ interface IPersonagemDetalheCard {
     id: string;
   }>;
 }
+
+// export async function generateMetadata({
+//   params,
+// }: IPersonagemDetalheCard): Promise<Metadata> {
+//   const { id } = await params;
+//   const { data: personagem } = await personagemGet(Number(id));
+
+//   return {
+//     title: personagem
+//       ? `${personagem.nome} | ${personagem.geracao.toUpperCase()}`
+//       : "Yugioh | Project",
+//     description: personagem
+//       ? `Detalhes do personagem ${personagem.nome}`
+//       : "Página do Mundial",
+//   };
+// }
+
+// export async function generateMetadata({
+//   params,
+// }: {
+//   params: { id: string };
+// }): Promise<Metadata> {
+//   const { id } = params;
+//   const { data: personagem } = await personagemGet(Number(id));
+
+//   return {
+//     title: personagem
+//       ? `${personagem.nome} | ${personagem.geracao.toUpperCase()}`
+//       : "Yugioh | Project",
+//     description: personagem ? `Detalhes do personagem ${personagem.nome}` : "",
+//   };
+// }
+
 export async function generateMetadata({
   params,
-}: IPersonagemDetalheCard): Promise<Metadata> {
+}: {
+  params: Promise<{
+    id: string;
+  }>;
+}): Promise<Metadata> {
   const { id } = await params;
-  const { data: personagem } = await personagemGet(Number(id));
 
-  return {
-    title: personagem
-      ? `${personagem.nome} | ${personagem.geracao.toUpperCase()}`
-      : "Yugioh | Project",
-    description: personagem
-      ? `Detalhes do personagem ${personagem.nome}`
-      : "Página do Mundial",
+  // Fallback inicial básico
+  let metadata: Metadata = {
+    title: "Yugioh | Project",
+    description: "Página do Mundial",
   };
+
+  try {
+    const { data: personagem } = await personagemGet(Number(id));
+
+    if (personagem) {
+      metadata = {
+        title: `${personagem.nome} | ${personagem.geracao.toUpperCase()}`,
+        description: `Detalhes do personagem ${personagem.nome}`,
+      };
+    }
+  } catch {
+    // Silencia erro, mantém fallback
+  }
+
+  return metadata;
 }
 
 export default async function PersonagemPage({
@@ -43,6 +91,7 @@ export default async function PersonagemPage({
   const { data: personagem, error: errorPersonagem } = await personagemGet(
     Number(id),
   );
+
   const { data: rankings, error: errorRankings } = await rankingGlobalGet();
   const error = errorPersonagem || errorRankings;
   if (!personagem || !rankings) return <Error message={error} />;
