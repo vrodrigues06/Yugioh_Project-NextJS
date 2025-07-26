@@ -141,7 +141,7 @@ export const DuelistItemModel = ({
         .filter(
           (entry): entry is { eliminadoPor: string; ano: number } => !!entry,
         );
-    }, [torneios, duelista, torneio.ano]);
+    }, [torneios, duelista, personagem?.inicio_em]);
 
   return {
     personagem,
