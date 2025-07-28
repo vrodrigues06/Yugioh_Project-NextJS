@@ -26,7 +26,7 @@ export async function signInAsAdmin(prev_state = {}, formData: FormData) {
       path: "/",
       httpOnly: true,
       secure: true,
-      maxAge: 60 * 60 * 6,
+      maxAge: 60 * 60 * 24 * 7,
     });
 
     return {
