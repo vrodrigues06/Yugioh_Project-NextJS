@@ -4,6 +4,8 @@ import Error from "@/components/error";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
+export const dynamic = "force-dynamic";
+
 export default async function TorneioRedirectPage({
   params,
 }: {
