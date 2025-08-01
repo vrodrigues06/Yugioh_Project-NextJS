@@ -26,7 +26,7 @@ export default async function RegrasAnoPage({ params }: Props) {
       <div className="bg-azul-700 border border-azul-500 p-4 rounded-md shadow-sm">
         <h1 className="text-white font-semibold text-sm xs:text-base text-center tracking-wider flex items-center justify-center gap-2">
           <span className="text-orange-400 text-base xs:text-lg">★</span>
-          Master Rule {conjuntoRegras.ano}
+          MASTER RULE {conjuntoRegras.ano} - {conjuntoRegras.titulo}
         </h1>
       </div>
 
