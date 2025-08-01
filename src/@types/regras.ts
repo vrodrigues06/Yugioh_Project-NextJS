@@ -8,4 +8,5 @@ export type ConjuntoRegras = {
   decks: RegraItem[];
   torneio: RegraItem[];
   mundial: RegraItem[];
+  titulo: string;
 };

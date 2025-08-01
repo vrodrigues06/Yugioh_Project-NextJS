@@ -34,7 +34,7 @@ export default async function RegrasPage() {
       <div className="bg-azul-700 border border-azul-500 p-4 rounded-md shadow-sm">
         <h1 className="text-white font-semibold text-sm xs:text-base text-center tracking-wider flex items-center justify-center gap-2">
           <span className="text-orange-400 text-base xs:text-lg">★</span>
-          MASTER RULE {conjuntoRegrasAtual.ano}
+          MASTER RULE {conjuntoRegrasAtual.ano} - {conjuntoRegrasAtual.titulo}
         </h1>
       </div>
       <RegrasLista regrasAno={conjuntoRegrasAtual} />
