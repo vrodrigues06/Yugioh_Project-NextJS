@@ -1,13 +1,12 @@
-import { ParticipantesI } from "@/components/mundial/gerar-mundial";
+import { ParticipantesI } from "@/components/mundial/mundial-page/v2/gerar-mundial";
 
-import { unificarChaves } from "./unificarChaves";
 import { Match } from "@/@types";
+import { unificarChaves } from "../unificarChaves";
 
 export function gerarChavesMundial(participantes: ParticipantesI) {
   const participantesAr = [
     ...participantes.campeoes,
     ...participantes.quartos,
-    ...participantes.selecionadosQuartas,
     ...participantes.terceiros,
     ...participantes.vices,
   ];
@@ -15,8 +14,6 @@ export function gerarChavesMundial(participantes: ParticipantesI) {
   const totalParticipantes = participantesAr.length;
 
   const potenciaDe2 = Math.pow(2, Math.floor(Math.log2(totalParticipantes)));
-
-  const totalPartidasFasePrincipal = potenciaDe2 - 1;
 
   const { partidas: partidasFasePrincipal, proximoId } =
     gerarChavesFasePrincipalMundial(participantesAr, potenciaDe2, 1);
@@ -127,65 +124,56 @@ export function preencherPrimeiraRodadaMundial(
   partidas: Match[],
   duelistas: ParticipantesI,
 ) {
+  // 1️⃣ Filtrar apenas as partidas da primeira rodada (excluindo "Disputa 3º Lugar")
   const primeiraRodada = partidas.filter(
     (p) => p.rodada === partidas[0].rodada && p.rodada !== "Disputa 3º Lugar",
   );
 
+  // 2️⃣ Criar cópias das listas de duelistas (para não modificar o original)
+  //    Agora sem `selecionadosQuartas`, pois não vamos usar mais essa lista.
   const duelistasDisponiveis = {
     campeoes: [...duelistas.campeoes],
     vices: [...duelistas.vices],
     terceiros: [...duelistas.terceiros],
     quartos: [...duelistas.quartos],
-    selecionadosQuartas: [...duelistas.selecionadosQuartas],
   };
 
   const duelos: [string, string][] = [];
 
-  // 1. Cada Campeão × Selecionado das Quartas
-  duelistasDisponiveis.campeoes.forEach((campeao) => {
-    const selecionado = removerAleatorio(
-      duelistasDisponiveis.selecionadosQuartas,
-    );
-    duelos.push([campeao, selecionado]);
-  });
-  duelistasDisponiveis.campeoes = []; // Esvazia os campeões pois já foram usados
+  // 3️⃣ Criar confrontos: Campeão × Quarto
+  //    Vamos percorrer todos os campeões e parear com um quarto aleatório.
+  while (
+    duelistasDisponiveis.campeoes.length > 0 &&
+    duelistasDisponiveis.quartos.length > 0
+  ) {
+    const campeao = removerAleatorio(duelistasDisponiveis.campeoes);
+    const quarto = removerAleatorio(duelistasDisponiveis.quartos);
+    duelos.push([campeao, quarto]);
+  }
 
-  // 2. Vice × Selecionado das Quartas
-  const vice1 = removerAleatorio(duelistasDisponiveis.vices);
-  const selecionadoQ = removerAleatorio(
-    duelistasDisponiveis.selecionadosQuartas,
-  );
-  duelos.push([vice1, selecionadoQ]);
+  // 4️⃣ Criar confrontos: Vice × Terceiro
+  //    Fazemos o mesmo processo para vices contra terceiros.
+  while (
+    duelistasDisponiveis.vices.length > 0 &&
+    duelistasDisponiveis.terceiros.length > 0
+  ) {
+    const vice = removerAleatorio(duelistasDisponiveis.vices);
+    const terceiro = removerAleatorio(duelistasDisponiveis.terceiros);
+    duelos.push([vice, terceiro]);
+  }
 
-  // 3. Dois Vices × Dois Quartos
-  const vice2 = removerAleatorio(duelistasDisponiveis.vices);
-  const quarto1 = removerAleatorio(duelistasDisponiveis.quartos);
-  duelos.push([vice2, quarto1]);
-
-  const vice3 = removerAleatorio(duelistasDisponiveis.vices);
-  const quarto2 = removerAleatorio(duelistasDisponiveis.quartos);
-  duelos.push([vice3, quarto2]);
-
-  // 4. Terceiro × Quarto
-  const terceiro1 = removerAleatorio(duelistasDisponiveis.terceiros);
-  const quarto3 = removerAleatorio(duelistasDisponiveis.quartos);
-  duelos.push([terceiro1, quarto3]);
-
-  // 5. Terceiro × Terceiro (os dois últimos)
-  const terceiro2 = removerAleatorio(duelistasDisponiveis.terceiros);
-  const terceiro3 = removerAleatorio(duelistasDisponiveis.terceiros);
-  duelos.push([terceiro2, terceiro3]);
-
-  // 🌀 Embaralhar ordem dos confrontos na chave
+  // 🌀 5️⃣ Embaralhar a ordem dos confrontos (para deixar a chave mais aleatória)
   const duelosEmbaralhados = embaralharArray(duelos);
 
-  // 🏆 Preencher partidas
+  // 🏆 6️⃣ Preencher as partidas da primeira rodada com os duelos gerados
   for (let i = 0; i < primeiraRodada.length; i++) {
     const partida = primeiraRodada[i];
     const duelo = duelosEmbaralhados[i];
 
-    partida.duelista1 = duelo[0];
-    partida.duelista2 = duelo[1];
+    if (duelo) {
+      partida.duelista1 = duelo[0];
+      partida.duelista2 = duelo[1];
+    }
   }
 
   return partidas;

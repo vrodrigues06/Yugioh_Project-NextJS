@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { Match, Mundial, Torneio } from "@/@types";
-import { Personagem } from "@/@types/personagem";
+import { Personagem, Rivalidades } from "@/@types/personagem";
 import useAllRankings from "@/hooks/rankings/useAllRankings";
 import { useHandleMatchMundial } from "@/hooks/mundial/useHandleMatchMundial";
 import { getPerdedor } from "@/functions/getPerdedor";
@@ -8,6 +8,10 @@ import { findRankingIndex } from "@/functions/findRankingIndex";
 import { setMelhoresColocacoes } from "@/functions/setMelhoresColocacoes";
 import { getPersonagemByName } from "@/_lib/apis/personagens-api";
 import { getResumoPersonagemMundial } from "@/functions/chaves-torneio/getResumoPersonagemMundial";
+import { useMundialByYear } from "@/hooks/mundial/useMundialByYear";
+import { useMundiais } from "@/hooks/mundial/useMundiais";
+import { setRivalidades } from "@/functions/set-rivalidades";
+import { filtrarRivalidadesEmDestaque } from "@/functions/filtrar-rivalidades-destaque";
 
 export const DuelistItemMundialModel = ({
   duelista,
@@ -24,6 +28,8 @@ export const DuelistItemMundialModel = ({
     match,
     torneio,
   });
+  const { data: torneioAnterior } = useMundialByYear(torneio.ano - 1);
+  const { data: torneios } = useMundiais();
 
   const { data: rankings, error } = useAllRankings();
 
@@ -36,6 +42,33 @@ export const DuelistItemMundialModel = ({
 
     fetchPersonagem();
   }, [duelista]);
+
+  const oponenteAtual =
+    match.duelista1 === duelista ? match.duelista2 : match.duelista1;
+
+  const isAvengedDuel = (() => {
+    if (!torneioAnterior || !torneioAnterior.classificacao) return false;
+
+    const registroAnterior = torneioAnterior.classificacao.find(
+      (c) => c.nome === duelista,
+    );
+
+    if (!registroAnterior?.eliminadoPor) return false;
+
+    return registroAnterior?.eliminadoPor === oponenteAtual;
+  })();
+
+  const isLastChampion = (() => {
+    if (!torneioAnterior || !torneioAnterior.podium) return false;
+
+    const registroAnterior = torneioAnterior.podium.find(
+      (p) => p.nome === duelista,
+    );
+
+    if (!registroAnterior) return false;
+
+    return registroAnterior.classificacao === "Campeao";
+  })();
 
   const perdedor = useMemo(() => getPerdedor(match), [match]);
   const isPerdedor = duelista === perdedor;
@@ -60,6 +93,40 @@ export const DuelistItemMundialModel = ({
     [personagem, rankings],
   );
 
+  const torneiosFilted = torneios.filter((t) => t.ano < torneio.ano);
+
+  let rivalidades: Rivalidades[] = [];
+  if (personagem !== null) {
+    const rivalidadesSemFiltro =
+      setRivalidades(personagem, torneiosFilted) || [];
+
+    rivalidades = filtrarRivalidadesEmDestaque(rivalidadesSemFiltro);
+  }
+
+  const eliminadoresAnteriores: { eliminadoPor: string; ano: number }[] =
+    useMemo(() => {
+      if (!duelista || !torneios) return [];
+
+      const anosValidos = torneios.map((t) => {
+        if (t.ano >= Number(personagem?.inicio_em)) {
+          return t.ano;
+        }
+      });
+
+      return anosValidos
+        .map((ano) => {
+          const t = torneios.find((t) => t.ano === ano && t.classificacao);
+          const eliminadoPor = t?.classificacao.find(
+            (c) => c.nome === duelista,
+          )?.eliminadoPor;
+
+          return eliminadoPor ? { eliminadoPor, ano } : null;
+        })
+        .filter(
+          (entry): entry is { eliminadoPor: string; ano: number } => !!entry,
+        );
+    }, [torneios, duelista, personagem?.inicio_em]);
+
   return {
     personagem,
     handleMatch,
@@ -77,5 +144,9 @@ export const DuelistItemMundialModel = ({
     terceiro,
     quarto,
     hasTitulo,
+    isAvengedDuel,
+    isLastChampion,
+    rivalidades,
+    eliminadoresAnteriores,
   };
 };

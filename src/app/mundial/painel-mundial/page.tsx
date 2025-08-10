@@ -1,9 +1,9 @@
 "use client";
 import Loading from "@/components/loading";
-import GerarMundial from "@/components/mundial/gerar-mundial";
 import MundialEmAndamento from "@/components/mundial/mundial-em-andamento";
 import MundialIndisponivel from "@/components/mundial/mundial-indisponivel";
 import PainelMundialModel from "@/components/mundial/mundial-page/painel-mundial-model";
+import GerarMundial from "@/components/mundial/mundial-page/v1/gerar-mundial";
 
 export default function PainelMundialPage() {
   const { isLoading, podeCriar, mundiaisEmAndamento, participantes } =

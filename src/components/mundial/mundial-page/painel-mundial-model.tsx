@@ -3,7 +3,7 @@ import { useMundiais } from "@/hooks/mundial/useMundiais";
 import useAllPersonagens from "@/hooks/personagens/useAllPersonagens";
 import { useAllTorneios } from "@/hooks/torneios/useAllTorneios";
 import { verificarSePodeCriarMundial } from "@/functions/mundial/verificar-pode-criar-mundial";
-import { definirParticipantesMundial } from "@/functions/mundial/definir-participantes-mundial";
+import { definirParticipantesMundial } from "@/functions/mundial/v2/definir-participantes-mundial";
 
 const PainelMundialModel = () => {
   const { data: mundiais, isLoading: isLoadingMundial, error } = useMundiais();

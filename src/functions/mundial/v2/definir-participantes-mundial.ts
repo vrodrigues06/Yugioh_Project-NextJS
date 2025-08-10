@@ -1,5 +1,5 @@
 import { Classificacao, Podium, Torneio } from "@/@types";
-import { embaralharArray } from "../embaralharArray";
+import { embaralharArray } from "../../embaralharArray";
 
 export const definirParticipantesMundial = (
   ano: number,

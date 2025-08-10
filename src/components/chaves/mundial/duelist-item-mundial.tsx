@@ -38,6 +38,10 @@ const DuelistItemMundial = ({
     terceiro,
     quarto,
     hasTitulo,
+    rivalidades,
+    eliminadoresAnteriores,
+    isAvengedDuel,
+    isLastChampion,
   } = DuelistItemMundialModel({ duelista, match, torneio });
   const { isModalOpen, openModal, closeModal, confirmAction } =
     useConfirmModal(handleMatch);
@@ -63,12 +67,18 @@ const DuelistItemMundial = ({
           terceiro={terceiro}
           quarto={quarto}
           openModal={openModal}
+          match={match}
+          rivalidades={rivalidades}
+          isAvengedDuel={isAvengedDuel}
+          isLastChampion={isLastChampion}
         />
         <DuelistMundialTooltip
           personagem={personagem}
           rankingMundial={rankingMundial}
           melhoresColocacoes={melhoresColocacoes}
           colocacoesAnterioresMundial={colocacoesAnterioresMundial}
+          rivalidades={rivalidades}
+          eliminadoresAnteriores={eliminadoresAnteriores}
           colocacoesAnteriores={colocacoesAnteriores}
         />
       </div>

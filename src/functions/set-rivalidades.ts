@@ -1,7 +1,7 @@
 // import { Torneio } from "@/@types";
 // import { Personagem, Rivalidades } from "@/@types/personagem";
 
-import { Torneio } from "@/@types";
+import { Mundial, Torneio } from "@/@types";
 import { Personagem, Rivalidades } from "@/@types/personagem";
 
 // export function setRivalidades(
@@ -170,7 +170,7 @@ import { Personagem, Rivalidades } from "@/@types/personagem";
 
 export function setRivalidades(
   personagem: Personagem,
-  torneios: Torneio[],
+  torneios: Torneio[] | Mundial[],
 ): Rivalidades[] {
   const anosParticipados = personagem.colocacoes.map((c) => Number(c.ano));
 

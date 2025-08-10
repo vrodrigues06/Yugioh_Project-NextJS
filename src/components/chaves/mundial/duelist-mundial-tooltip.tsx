@@ -1,4 +1,4 @@
-import { Colocacao, Personagem } from "@/@types/personagem";
+import { Colocacao, Personagem, Rivalidades } from "@/@types/personagem";
 import { setEmoji } from "@/functions/setEmoji";
 import React from "react";
 
@@ -8,6 +8,8 @@ type DuelistMundialTooltipProps = {
   melhoresColocacoes: Colocacao[];
   colocacoesAnterioresMundial: Colocacao[];
   colocacoesAnteriores: Colocacao[];
+  rivalidades: Rivalidades[];
+  eliminadoresAnteriores: { eliminadoPor: string; ano: number }[];
 };
 
 export function DuelistMundialTooltip({
@@ -16,7 +18,11 @@ export function DuelistMundialTooltip({
   melhoresColocacoes,
   colocacoesAnterioresMundial,
   colocacoesAnteriores,
+  rivalidades,
+  eliminadoresAnteriores,
 }: DuelistMundialTooltipProps) {
+  if (!personagem) return null;
+
   return (
     <div className="absolute z-50 w-60 p-3 bg-azul-950/80 text-slate-400 text-xs rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none left-1/2 -translate-x-1/2 top-14">
       <div className="flex justify-between mb-4 border-b pb-1.5 border-sky-300/80">
@@ -54,18 +60,53 @@ export function DuelistMundialTooltip({
         </div>
       )}
 
+      {rivalidades.length > 0 && (
+        <div className="mb-4">
+          <p className="mb-1">Rivals:</p>
+          {rivalidades.map((rival) => (
+            <span
+              key={rival.duelista2}
+              className="flex gap-0.5 items-center text-white font-semibold"
+            >
+              {rival.duelista2}
+            </span>
+          ))}
+        </div>
+      )}
+
       {colocacoesAnterioresMundial.length > 0 && (
         <div className="mb-4">
           <p className="mb-1">
             Histórico Recente: <span className="text-white">(mundial)</span>
           </p>
           <ul className="grid gap-1">
-            {colocacoesAnterioresMundial.map((c) => (
-              <li key={c.ano} className="flex gap-0.5 items-center text-white">
-                <span className="text-sky-400 font-semibold">{c.ano}:</span>
-                {setEmoji(c.classificacao)} {c.classificacao}
-              </li>
-            ))}
+            {colocacoesAnterioresMundial.map((c) => {
+              // Procurar se houve eliminador para esse ano no mundial
+              const eliminador = eliminadoresAnteriores.find(
+                (e) => e.ano === Number(c.ano),
+              );
+
+              return (
+                <li
+                  key={c.ano}
+                  className="flex flex-col text-white leading-tight"
+                >
+                  <span className="flex items-center gap-1">
+                    <span className="text-sky-400 font-semibold">{c.ano}:</span>
+                    {setEmoji(c.classificacao)} {c.classificacao}
+                  </span>
+
+                  {eliminador && (
+                    <span className="text-slate-500 text-xs italic">
+                      eliminado por{" "}
+                      <span className="text-rose-400">
+                        {eliminador.eliminadoPor}
+                      </span>
+                    </span>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         </div>
       )}
@@ -76,7 +117,10 @@ export function DuelistMundialTooltip({
         </p>
         <ul className="grid gap-1">
           {colocacoesAnteriores.map((c) => (
-            <li key={c.ano} className="flex gap-0.5 items-center text-white">
+            <li
+              key={c.ano}
+              className="flex items-center gap-1 text-white leading-tight"
+            >
               <span className="text-sky-400 font-semibold">{c.ano}:</span>
               {setEmoji(c.classificacao)} {c.classificacao}
             </li>

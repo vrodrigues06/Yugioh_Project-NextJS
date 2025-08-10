@@ -1,8 +1,8 @@
-import { ParticipantesI } from "@/components/mundial/gerar-mundial";
-import useCreateMundial from "./useCreateMundial";
+import { ParticipantesI } from "@/components/mundial/mundial-page/v2/gerar-mundial";
+import useCreateMundial from "../useCreateMundial";
 import { useRouter } from "next/navigation";
 import { Mundial } from "@/@types";
-import { gerarChavesMundial } from "@/functions/chaves-torneio/gerarChavesMundial";
+import { gerarChavesMundial } from "@/functions/chaves-torneio/v1/gerarChavesMundial";
 
 type useHandleMatchMundialProps = {
   participantes: ParticipantesI | null | undefined;
@@ -13,7 +13,7 @@ export const useGerarMundial = ({
   participantes,
   ano = 0,
 }: useHandleMatchMundialProps) => {
-  const { mutateAsync: createMundial, isCreating } = useCreateMundial();
+  const { mutateAsync: createMundial } = useCreateMundial();
   const router = useRouter();
   if (!ano) return {};
   if (!participantes) return {};
@@ -36,6 +36,7 @@ export const useGerarMundial = ({
 
     setTimeout(() => {
       router.push(`/mundial/painel-mundial/${ano}`);
+      router.refresh();
     }, 1000);
   }
 

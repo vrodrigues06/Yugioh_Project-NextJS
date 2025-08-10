@@ -1,7 +1,10 @@
-import { Colocacao, Personagem } from "@/@types/personagem";
+import { Match } from "@/@types";
+import { Colocacao, Personagem, Rivalidades } from "@/@types/personagem";
 import { getCorGeracao } from "@/functions/get-cor-geracao";
 import { setEmoji } from "@/functions/setEmoji";
 import React from "react";
+import { GiBurningSkull, GiLaurelCrown, GiMightyForce } from "react-icons/gi";
+import { LuSwords } from "react-icons/lu";
 
 type DuelistItemCardMundialProps = {
   duelista: string | null;
@@ -15,6 +18,10 @@ type DuelistItemCardMundialProps = {
   vices: Colocacao[];
   terceiro: Colocacao[];
   quarto: Colocacao[];
+  match: Match;
+  rivalidades: Rivalidades[];
+  isAvengedDuel: boolean;
+  isLastChampion: boolean;
   openModal: () => void;
 };
 
@@ -31,6 +38,10 @@ export function DuelistItemCardMundial({
   terceiro,
   quarto,
   openModal,
+  rivalidades,
+  match,
+  isAvengedDuel,
+  isLastChampion,
 }: DuelistItemCardMundialProps) {
   const handleClick = () => {
     if (!hasVencedor && isMatchReady) {
@@ -68,8 +79,75 @@ export function DuelistItemCardMundial({
 
   const corGeracao = getCorGeracao(personagem?.geracao);
 
+  const posicaoDuelista =
+    match.duelista1 === duelista
+      ? "duelista1"
+      : match.duelista2 === duelista
+      ? "duelista2"
+      : null;
+
+  const oponente =
+    posicaoDuelista === "duelista1" ? match.duelista2 : match.duelista1;
+
+  const isRival =
+    rivalidades.length > 0 &&
+    oponente &&
+    rivalidades.some((r) => r.duelista2 === oponente);
+
+  const posicaoIconeRivalidade =
+    posicaoDuelista === "duelista1" ? "-bottom-3" : "-top-4";
+
   return (
     <div onClick={handleClick} className={cardClasses}>
+      {isRival && (
+        <span
+          title="Duelo Clássico"
+          className={`
+            absolute z-20 ${posicaoIconeRivalidade} -right-1
+            animate-pulse bg-red-900 rounded-full p-1
+            flex items-center justify-center
+          `}
+        >
+          <LuSwords className="text-cyan-400  drop-shadow-glow text-lg animate-bounce-slow" />
+        </span>
+      )}
+      {isAvengedDuel && (
+        <span
+          title="Duelo de Vingança"
+          className={`animate-pulse
+                    absolute z-20 right-2
+                    bg-red-900 rounded-full p-1
+                    flex items-center justify-center
+                    `}
+        >
+          <GiBurningSkull />
+        </span>
+      )}
+      {isLastChampion && (
+        <span
+          title="Último Campeão"
+          className={`animate-pulse
+                    absolute z-20 right-2
+                    bg-laranja-500 rounded-full p-1
+                    flex items-center justify-center
+                    `}
+        >
+          <GiLaurelCrown />
+        </span>
+      )}
+      {hasVencedor && match.vencedor === duelista && match.isDueloAmazing && (
+        <span
+          title="Duelo Incrível"
+          className={`animate-pulse
+                    absolute z-20 right-8
+                    bg-purple-900 rounded-full p-1
+                    flex items-center justify-center
+                    `}
+        >
+          <GiMightyForce />
+        </span>
+      )}
+
       <div
         className={avatarClasses}
         style={{ backgroundImage: `url(${personagem?.perfil})` }}

@@ -1,15 +1,15 @@
 "use client";
-import { useGerarMundial } from "@/hooks/mundial/useGerarMundial";
+import { useGerarMundial } from "@/hooks/mundial/v2/useGerarMundial";
 import { motion } from "framer-motion";
 import React from "react";
-import MundialParticipantesItem from "./mundial-participantes-item";
-import Button from "../form/button-form";
+import MundialParticipantesItem from "../../mundial-participantes-item";
+import Button from "../../../form/button-form";
 
 export type ParticipantesI = {
   campeoes: string[];
   quartos: string[];
-  restantesQuartas: string[];
-  selecionadosQuartas: string[];
+  restantesQuartas?: string[];
+  selecionadosQuartas?: string[];
   terceiros: string[];
   vices: string[];
 };
