@@ -1,4 +1,4 @@
-import { ParticipantesI } from "@/components/mundial/mundial-page/v2/gerar-mundial";
+import { ParticipantesI } from "@/components/mundial/mundial-page/v1/gerar-mundial";
 
 import { Match } from "@/@types";
 import { unificarChaves } from "../unificarChaves";

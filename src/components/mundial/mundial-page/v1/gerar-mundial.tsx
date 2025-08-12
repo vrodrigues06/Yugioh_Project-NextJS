@@ -1,5 +1,5 @@
 "use client";
-import { useGerarMundial } from "@/hooks/mundial/v2/useGerarMundial";
+import { useGerarMundial } from "@/hooks/mundial/v1/useGerarMundial";
 import { motion } from "framer-motion";
 import React from "react";
 import MundialParticipantesItem from "../../mundial-participantes-item";
