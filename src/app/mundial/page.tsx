@@ -17,7 +17,8 @@ export default async function MundialRedirectPage() {
 
   const anoMaisRecente = anos[0];
 
-  if (anoMaisRecente !== undefined) redirect(`/mundial/${anoMaisRecente}`);
+  if (anoMaisRecente !== undefined)
+    return redirect(`/mundial/${anoMaisRecente}`);
 
-  redirect(`/mundial/criar`);
+  return redirect(`/mundial/criar`);
 }
