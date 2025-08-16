@@ -8,7 +8,12 @@ export function useUpdateMatchesMundial(ano: number) {
   return useMutation({
     mutationFn: (matches: Match[]) => updateMatchesMundial(matches, ano),
     onSuccess: () => {
+      // Invalida todas as queries relacionadas a mundiais
       queryClient.invalidateQueries({ queryKey: ["mundiais"] });
+      queryClient.invalidateQueries({ queryKey: ["mundial"] });
+
+      // Força refetch imediato das queries principais
+      queryClient.refetchQueries({ queryKey: ["mundiais"] });
     },
   });
 }

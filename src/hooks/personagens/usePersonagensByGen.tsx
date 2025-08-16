@@ -15,7 +15,9 @@ const usePersonagensByGen = (geracao: string) => {
     },
     enabled: !!geracao, // Evita chamadas desnecessárias se 'geracao' for undefined/null
     retry: 2,
-    staleTime: 1000 * 60 * 5, // 5 minutos
+    staleTime: 0, // Force-dynamic: sempre busca dados atualizados
+    refetchOnWindowFocus: true, // Refaz a query quando a janela ganha foco
+    refetchOnMount: true, // Refaz a query quando o componente é montado
   });
 
   const errorMessage = error

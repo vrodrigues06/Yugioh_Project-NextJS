@@ -10,10 +10,18 @@ export function useUpdateClassificacao(geracao: string, ano: number) {
       updateClassificacao(classificacao, geracao, ano),
 
     onSuccess: () => {
-      // 🔥 Invalida a query do torneio específico
+      // Invalida todas as queries relacionadas ao torneio específico
       queryClient.invalidateQueries({
         queryKey: ["torneio", geracao, ano],
       });
+      queryClient.invalidateQueries({ queryKey: ["AllTorneios"] });
+      queryClient.invalidateQueries({ queryKey: ["TorneiosByGen"] });
+      queryClient.invalidateQueries({ queryKey: ["rankingAnual"] });
+
+      // Força refetch imediato das queries principais
+      queryClient.refetchQueries({ queryKey: ["torneio", geracao, ano] });
+      queryClient.refetchQueries({ queryKey: ["AllTorneios"] });
+      queryClient.refetchQueries({ queryKey: ["TorneiosByGen"] });
     },
 
     onError: (error) => {

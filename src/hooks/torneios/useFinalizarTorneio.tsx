@@ -21,9 +21,21 @@ export function useFinalizarTorneio() {
 
     onSuccess: (_, variables) => {
       const { geracao, ano } = variables;
+
+      // Invalida todas as queries relacionadas a torneios
       queryClient.invalidateQueries({
         queryKey: ["torneio", geracao, ano],
       });
+      queryClient.invalidateQueries({ queryKey: ["AllTorneios"] });
+      queryClient.invalidateQueries({ queryKey: ["TorneiosByGen"] });
+      queryClient.invalidateQueries({ queryKey: ["torneio"] });
+      queryClient.invalidateQueries({ queryKey: ["rankingAnual"] });
+
+      // Força refetch imediato das queries principais
+      queryClient.refetchQueries({ queryKey: ["AllTorneios"] });
+      queryClient.refetchQueries({ queryKey: ["TorneiosByGen"] });
+      queryClient.refetchQueries({ queryKey: ["rankingAnual"] });
+
       toast.success("Torneio finalizado com sucesso!");
     },
 

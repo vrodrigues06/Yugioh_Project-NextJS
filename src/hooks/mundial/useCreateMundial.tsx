@@ -1,6 +1,7 @@
 import { createMundial } from "@/_lib/apis/mundial-api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { invalidateMundialQueries } from "@/lib/react-query-config";
 
 const useCreateMundial = () => {
   const queryClient = useQueryClient();
@@ -14,7 +15,9 @@ const useCreateMundial = () => {
     mutationFn: createMundial,
     onSuccess: (data) => {
       toast.success("Torneio criado com sucesso");
-      queryClient.invalidateQueries({ queryKey: ["mundiais"] });
+
+      // Invalida todas as queries relacionadas a mundiais usando função utilitária
+      invalidateMundialQueries(queryClient);
     },
     onError: (error) => {
       const errorMessage =

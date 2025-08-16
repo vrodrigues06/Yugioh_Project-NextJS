@@ -9,7 +9,9 @@ export function usePersonagemByName(nome: string) {
       return getPersonagemByName(nome);
     },
     enabled: !!nome, // Só executa se o nome existir
-    staleTime: 1000 * 60 * 5, // Dados ficam frescos por 5 minutos
+    staleTime: 0, // Force-dynamic: sempre busca dados atualizados
+    refetchOnWindowFocus: true, // Refaz a query quando a janela ganha foco
+    refetchOnMount: true, // Refaz a query quando o componente é montado
     retry: 2, // Tenta no máximo 2 vezes em caso de erro
   });
 }

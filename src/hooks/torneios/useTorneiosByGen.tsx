@@ -14,7 +14,9 @@ export const useTorneiosByGen = (geracao: Geracao) => {
       return torneios ?? []; // Garante array mesmo se null
     },
     enabled: !!geracao, // Só executa se geracao for definida
-    staleTime: 1000 * 60 * 60, // 1 hora
+    staleTime: 0, // Force-dynamic: sempre busca dados atualizados
+    refetchOnWindowFocus: true, // Refaz a query quando a janela ganha foco
+    refetchOnMount: true, // Refaz a query quando o componente é montado
     retry: 2,
   });
 

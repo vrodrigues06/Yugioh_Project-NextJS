@@ -10,10 +10,16 @@ export function useUpdateClassificacaoMundial(ano: number) {
       updateClassificacaoMundial(classificacao, ano),
 
     onSuccess: () => {
-      // 🔥 Invalida a query do torneio específico
+      // Invalida todas as queries relacionadas a mundiais
       queryClient.invalidateQueries({
         queryKey: ["mundiais"],
       });
+      queryClient.invalidateQueries({ queryKey: ["mundial"] });
+      queryClient.invalidateQueries({ queryKey: ["rankingAnual"] });
+
+      // Força refetch imediato das queries principais
+      queryClient.refetchQueries({ queryKey: ["mundiais"] });
+      queryClient.refetchQueries({ queryKey: ["rankingAnual"] });
     },
 
     onError: (error) => {

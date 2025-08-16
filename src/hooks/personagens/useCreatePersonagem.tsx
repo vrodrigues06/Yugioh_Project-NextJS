@@ -3,6 +3,7 @@ import { createPersonagem } from "@/_lib/apis/personagens-api";
 import { PersonagemFormData } from "@/schemas/personagem-schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { invalidatePersonagemQueries } from "@/lib/react-query-config";
 
 export default function useCreatePersonagem() {
   const queryClient = useQueryClient();
@@ -15,8 +16,8 @@ export default function useCreatePersonagem() {
     onSuccess: () => {
       toast.success("Personagem Criado com sucesso");
 
-      // Invalida a query para que ela seja refeita
-      queryClient.invalidateQueries({ queryKey: ["allPersonagens"] });
+      // Invalida todas as queries relacionadas a personagens usando função utilitária
+      invalidatePersonagemQueries(queryClient);
     },
     onError: (error) => {
       const errorMessage =

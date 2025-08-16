@@ -13,6 +13,9 @@ export const useMundiais = () => {
       const torneios = await getMundial();
       return torneios ?? []; // Evita retorno de null
     },
+    staleTime: 0, // Force-dynamic: sempre busca dados atualizados
+    refetchOnWindowFocus: true, // Refaz a query quando a janela ganha foco
+    refetchOnMount: true, // Refaz a query quando o componente é montado
     retry: 2, // Tenta novamente até 2 vezes em caso de erro
   });
 

@@ -13,8 +13,10 @@ export default function useAllRankings() {
       const rankings = await getRankingGlobal();
       return rankings ?? ({} as RankingData); // Evita retornar null
     },
+    staleTime: 0, // Force-dynamic: sempre busca dados atualizados
+    refetchOnWindowFocus: true, // Refaz a query quando a janela ganha foco
+    refetchOnMount: true, // Refaz a query quando o componente é montado
     retry: 2, // Tenta 2 vezes em caso de erro
-    staleTime: 1000 * 60 * 5, // 5 minutos (ajustável)
   });
 
   const errorMessage = error

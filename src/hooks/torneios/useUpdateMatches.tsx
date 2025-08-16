@@ -8,7 +8,15 @@ export function useUpdateMatches(geracao: string, ano: number) {
   return useMutation({
     mutationFn: (matches: Match[]) => updateMatches(matches, geracao, ano),
     onSuccess: () => {
+      // Invalida todas as queries relacionadas ao torneio específico
       queryClient.invalidateQueries({ queryKey: ["torneio", geracao, ano] });
+      queryClient.invalidateQueries({ queryKey: ["AllTorneios"] });
+      queryClient.invalidateQueries({ queryKey: ["TorneiosByGen"] });
+
+      // Força refetch imediato das queries principais
+      queryClient.refetchQueries({ queryKey: ["torneio", geracao, ano] });
+      queryClient.refetchQueries({ queryKey: ["AllTorneios"] });
+      queryClient.refetchQueries({ queryKey: ["TorneiosByGen"] });
     },
   });
 }

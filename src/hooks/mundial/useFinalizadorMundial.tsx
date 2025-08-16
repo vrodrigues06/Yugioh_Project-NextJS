@@ -16,9 +16,17 @@ export function useFinalizarMundial() {
       updatePodiumAndStatusMundial(podium, ano),
 
     onSuccess: () => {
+      // Invalida todas as queries relacionadas a mundiais
       queryClient.invalidateQueries({
         queryKey: ["mundiais"],
       });
+      queryClient.invalidateQueries({ queryKey: ["mundial"] });
+      queryClient.invalidateQueries({ queryKey: ["rankingAnual"] });
+
+      // Força refetch imediato das queries principais
+      queryClient.refetchQueries({ queryKey: ["mundiais"] });
+      queryClient.refetchQueries({ queryKey: ["rankingAnual"] });
+
       toast.success("Mundial finalizado com sucesso!");
     },
 

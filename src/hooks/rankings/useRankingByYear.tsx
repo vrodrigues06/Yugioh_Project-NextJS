@@ -17,6 +17,9 @@ export default function useRankingByYear(ano: number, geracao: string) {
       return ranking ?? null;
     },
     enabled: !!ano && !!geracao,
+    staleTime: 0, // Force-dynamic: sempre busca dados atualizados
+    refetchOnWindowFocus: true, // Refaz a query quando a janela ganha foco
+    refetchOnMount: true, // Refaz a query quando o componente é montado
     retry: 2,
   });
 

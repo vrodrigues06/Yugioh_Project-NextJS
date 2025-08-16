@@ -15,7 +15,9 @@ const useAllPersonagens = () => {
       return personagens ?? [];
     },
     retry: 2,
-    staleTime: 1000 * 60 * 60,
+    staleTime: 0, // Force-dynamic: sempre busca dados atualizados
+    refetchOnWindowFocus: true, // Refaz a query quando a janela ganha foco
+    refetchOnMount: true, // Refaz a query quando o componente é montado
   });
 
   // Mensagem de erro mais descritiva

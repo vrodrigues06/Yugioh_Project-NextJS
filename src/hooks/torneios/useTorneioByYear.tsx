@@ -11,7 +11,9 @@ export function useTorneioByYear(
     queryKey: ["torneio", geracao, year],
     queryFn: () => getTorneioByYear(geracao, year),
     enabled: !!geracao && !!year,
-    staleTime: 0,
+    staleTime: 0, // Force-dynamic: sempre busca dados atualizados
+    refetchOnWindowFocus: true, // Refaz a query quando a janela ganha foco
+    refetchOnMount: true, // Refaz a query quando o componente é montado
     ...options, // permite sobrescrever opções se necessário
   });
 }

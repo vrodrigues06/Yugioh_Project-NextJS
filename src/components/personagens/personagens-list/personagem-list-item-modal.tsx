@@ -6,6 +6,7 @@ import { Personagem } from "@/@types/personagem";
 import { useParams } from "next/navigation";
 import { torneiosGet } from "@/_lib/actions/torneios-get";
 import { useTorneiosByGen } from "@/hooks/torneios/useTorneiosByGen";
+import { invalidatePersonagemQueries } from "@/lib/react-query-config";
 
 export function PersonagemListItemModel(personagem: Personagem) {
   const { id, precisa_atualizar } = personagem;
@@ -90,7 +91,8 @@ export function PersonagemListItemModel(personagem: Personagem) {
       setIsAtualizar(!novoEstado);
       alert("Erro ao atualizar status. Tente novamente.");
     } else {
-      queryClient.invalidateQueries({ queryKey: ["allPersonagens"] });
+      // Invalida todas as queries relacionadas a personagens usando função utilitária
+      invalidatePersonagemQueries(queryClient);
     }
   }
 
